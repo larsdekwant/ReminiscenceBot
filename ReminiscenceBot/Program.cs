@@ -15,13 +15,10 @@ namespace ReminiscenceBot
         private readonly DiscordSocketClient _client;
         private readonly InteractionService _commands;
         private readonly IServiceProvider _services;
-        private readonly IConfiguration _config;
 
         // Construct and assign the program member variables.
         private Program()
         {
-            _config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
-
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Info
