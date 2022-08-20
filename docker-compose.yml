@@ -1,0 +1,35 @@
+version: '3.9'
+
+# Setup all the services to run.
+services:
+  reminiscence-bot:
+    build: ./ReminiscenceBot
+    image: reminiscence-bot
+    environment:
+      - BOT_TOKEN # Passed through from the env where docker compose is run
+
+  mongodb:
+    image: mongo
+    ports: 
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    #volumes:
+    #  - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    depends_on: [ mongodb ]
+    restart: always
+    ports:
+      - 8080:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+
+# Setup volumes to retain database data through container restarts
+#volumes:
+#  mongo-data:
+#    driver: local
