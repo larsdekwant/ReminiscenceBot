@@ -43,11 +43,11 @@ namespace ReminiscenceBot
 
         // The main bot method that runs asynchronously.
         public async Task MainAsync()
-        {            
-            await _client.LoginAsync(TokenType.Bot, _config["token"]);
+        {
+            await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOT_TOKEN"));
             await _client.StartAsync();
 
-            await _services.GetRequiredService<CommandHandler>().InitializeAsync();
+            await _services.GetRequiredService<SlashCommandService>().InitializeAsync();
 
             // Keep the bot running until it is closed.
             await Task.Delay(Timeout.Infinite);
@@ -59,7 +59,7 @@ namespace ReminiscenceBot
             return new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
-                .AddSingleton<CommandHandler>()
+                .AddSingleton<SlashCommandService>()
                 .BuildServiceProvider();
         }
 

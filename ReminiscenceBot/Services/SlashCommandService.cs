@@ -5,13 +5,13 @@ using Discord;
 
 namespace ReminiscenceBot.Services
 {
-    public class CommandHandler
+    public class SlashCommandService
     {
         private readonly DiscordSocketClient _client;
         private readonly InteractionService _commands;
         private readonly IServiceProvider _services;
 
-        public CommandHandler(DiscordSocketClient client, InteractionService commands, IServiceProvider services)
+        public SlashCommandService(DiscordSocketClient client, InteractionService commands, IServiceProvider services)
         {
             _client = client;
             _commands = commands;
