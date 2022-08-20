@@ -56,9 +56,10 @@ namespace ReminiscenceBot
         // Configure the services with Dependency Injection.
         private IServiceProvider ConfigureServices()
         {
-            return new ServiceCollection()
+            return new ServiceCollection()                
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
+                .AddSingleton(new DatabaseService("test"))
                 .AddSingleton<SlashCommandService>()
                 .BuildServiceProvider();
         }

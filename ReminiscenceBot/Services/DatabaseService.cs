@@ -15,7 +15,7 @@ namespace ReminiscenceBot.Services
 
         public DatabaseService(string name)
         {
-            var client = new MongoClient("mongodb://admin:password@localhost:27017");
+            var client = new MongoClient("mongodb://admin:password@mongodb");
             _db = client.GetDatabase(name);
         }
 

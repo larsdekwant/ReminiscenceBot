@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace ReminiscenceBot.Models
 {
+    public class User
+    {
+        public ulong DiscordId { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
     public class Player
     {
         public ulong DiscordId { get; set; }
