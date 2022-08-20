@@ -21,6 +21,7 @@ namespace ReminiscenceBot
         {
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
+                GatewayIntents = GatewayIntents.Guilds,
                 LogLevel = LogSeverity.Info
             });
 
@@ -30,10 +31,16 @@ namespace ReminiscenceBot
                 DefaultRunMode = RunMode.Async
             });
 
-            _services = ConfigureServices();
+            // Injected into the services/models using Dependency Injection
+            _services = new ServiceCollection()
+                .AddSingleton(_client)
+                .AddSingleton(_commands)
+                .AddSingleton(new DatabaseService("test"))
+                .AddSingleton<SlashCommandService>()
+                .BuildServiceProvider(); ;
 
             // Subscribe the event handlers and loggers.
-            _client.Ready += RegisterCommands;
+            _client.Ready += async () => { await _commands.RegisterCommandsToGuildAsync(652162806535421972); };          
             _client.Log += Log;
             _commands.Log += Log;
         }
@@ -48,23 +55,6 @@ namespace ReminiscenceBot
 
             // Keep the bot running until it is closed.
             await Task.Delay(Timeout.Infinite);
-        }
-
-        // Configure the services with Dependency Injection.
-        private IServiceProvider ConfigureServices()
-        {
-            return new ServiceCollection()                
-                .AddSingleton(_client)
-                .AddSingleton(_commands)
-                .AddSingleton(new DatabaseService("test"))
-                .AddSingleton<SlashCommandService>()
-                .BuildServiceProvider();
-        }
-
-        // Register the commands to a test server.
-        private async Task RegisterCommands()
-        {
-            await _commands.RegisterCommandsToGuildAsync(652162806535421972);
         }
 
         // Log info to the console.
