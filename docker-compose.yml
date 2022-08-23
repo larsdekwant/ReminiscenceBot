@@ -2,11 +2,11 @@ version: '3.9'
 
 # Setup all the services to run.
 services:
-  reminiscence-bot:
-    build: ./ReminiscenceBot
-    image: reminiscence-bot
-    environment:
-      - BOT_TOKEN # Passed through from the env where docker compose is run
+  #reminiscence-bot:
+  #  build: ./ReminiscenceBot
+  #  image: reminiscence-bot
+  #  environment:
+  #    - BOT_TOKEN # Passed through from the env where docker compose is run
 
   mongodb:
     image: mongo

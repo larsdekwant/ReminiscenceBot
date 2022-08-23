@@ -35,8 +35,8 @@ namespace ReminiscenceBot
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
-                .AddSingleton(new DatabaseService("test"))
-                .AddSingleton<SlashCommandService>()
+                .AddSingleton(new DatabaseService("reminiscence"))
+                .AddSingleton<CommandService>()
                 .BuildServiceProvider(); ;
 
             // Subscribe the event handlers and loggers.
@@ -51,7 +51,7 @@ namespace ReminiscenceBot
             await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOT_TOKEN"));
             await _client.StartAsync();
 
-            await _services.GetRequiredService<SlashCommandService>().InitializeAsync();
+            await _services.GetRequiredService<CommandService>().InitializeAsync();
 
             // Keep the bot running until it is closed.
             await Task.Delay(Timeout.Infinite);

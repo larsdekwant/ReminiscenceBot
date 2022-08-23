@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Bson;
 
+using Discord;
+
 namespace ReminiscenceBot.Services
 {    
     public class DatabaseService
@@ -15,8 +17,8 @@ namespace ReminiscenceBot.Services
 
         public DatabaseService(string name)
         {
-            var client = new MongoClient("mongodb://admin:password@mongodb");
-            _db = client.GetDatabase(name);
+            var client = new MongoClient("mongodb://admin:password@localhost:27017");
+            _db = client.GetDatabase(name);            
         }
 
         public void InsertDocument<T>(string table, T document)
@@ -32,27 +34,25 @@ namespace ReminiscenceBot.Services
             return collection.Find(new BsonDocument()).ToList();
         }
 
-        public T LoadDocumentById<T>(string table, int id)
+        public T? LoadDocument<T>(string table, FilterDefinition<T> filter)
         {
             var collection = _db.GetCollection<T>(table);
-            var filter = Builders<T>.Filter.Eq("Id", id);
+            var matches = collection.Find(filter);
 
-            return collection.Find(filter).First();
+            if (matches.CountDocuments() == 0) return default;
+
+            return matches.First();
         }
 
-        public void UpsertDocument<T>(string table, ulong id, T document)
+        public void UpsertDocument<T>(string table, FilterDefinition<T> filter, T document)
         {
             var collection = _db.GetCollection<T>(table);
-            collection.ReplaceOne(
-                Builders<T>.Filter.Eq("Id", id),
-                document,
-                new ReplaceOptions { IsUpsert = true });
+            collection.ReplaceOne(filter, document, new ReplaceOptions { IsUpsert = true });
         }
 
-        public void DeleteDocument<T>(string table, ulong id)
+        public void DeleteDocument<T>(string table, FilterDefinition<T> filter)
         {
             var collection = _db.GetCollection<T>(table);
-            var filter = Builders<T>.Filter.Eq("Id", id);
             collection.DeleteOne(filter);
         }
     }
