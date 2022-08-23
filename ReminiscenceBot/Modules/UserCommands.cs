@@ -19,6 +19,7 @@ namespace ReminiscenceBot.Modules
         }
 
         [SlashCommand("profile", "Displays a profile for a given user (defaults to the yourself)")]
+        [Help("This is some useless help message.")]
         public async Task ShowUserProfile(IUser? user = null)
         {
             if (user == null) user = Context.User;
@@ -34,8 +35,15 @@ namespace ReminiscenceBot.Modules
             // Build the profile embed.
             var embedBuilder = new EmbedBuilder()
                 .WithThumbnailUrl(user.GetAvatarUrl())
-                .WithTitle("Profile for " + user.Username)
-                .AddField("RoR name", rorUser.Player.RorName);
+                .WithTitle("Realm of Reminiscence profile")
+                .WithAuthor(user)
+                .AddField("Minecraft name", rorUser.Player.McUsername)
+                .AddField("Character name", rorUser.Player.RorName)
+                .AddField("Class", rorUser.Player.Class)
+                .AddField("Race", rorUser.Player.Race)
+                .WithColor(Color.Blue)
+                .WithCurrentTimestamp();
+
             await RespondAsync(embed: embedBuilder.Build());
         }
 
@@ -56,7 +64,8 @@ namespace ReminiscenceBot.Modules
 
             var embedBuilder = new EmbedBuilder()
                 .WithTitle("List of all Realms of Reminiscence users")
-                .WithDescription(string.Join('\n', rorUsers.Select(rorUser => rorUser.Discord.Mention)))
+                .WithDescription(string.Join('\n', rorUsers.Select(
+                    rorUser => $"{rorUser.Discord.Mention}: {rorUser.Player.RorName} ({rorUser.Player.Class})")))
                 .WithCurrentTimestamp();
 
             await RespondAsync(embed: embedBuilder.Build());

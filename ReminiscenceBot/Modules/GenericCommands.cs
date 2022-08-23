@@ -1,4 +1,6 @@
-﻿using Discord;
+﻿using System.Reflection;
+
+using Discord;
 using Discord.Interactions;
 
 using ReminiscenceBot.Services;
@@ -21,21 +23,6 @@ namespace ReminiscenceBot.Modules
         public async Task Ping()
         {
             await RespondAsync($"Server responded in {Context.Client.Latency}ms");
-        }
-
-        [SlashCommand("help", "Lists all available commands with a description")]
-        public async Task Help()
-        {
-            var cmds = _commands.SlashCommands;
-            var embedBuilder = new EmbedBuilder();
-
-            foreach (SlashCommandInfo cmd in cmds)
-            {
-                if (cmd.Name == "help") continue;
-                embedBuilder.AddField(cmd.Name, cmd.Description);
-            }
-
-            await RespondAsync("Here's a list of commands and their description: ", embed: embedBuilder.Build());
-        }
+        }        
     }
 }
