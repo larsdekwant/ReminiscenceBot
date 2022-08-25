@@ -46,7 +46,7 @@ namespace ReminiscenceBot
         // The main bot method that runs asynchronously.
         public async Task MainAsync()
         {
-            await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOT_TOKEN"));
+            await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("DISCORD_TOKEN"));
             await _client.StartAsync();
 
             await _services.GetRequiredService<InteractionHandlerService>().InitializeAsync();
