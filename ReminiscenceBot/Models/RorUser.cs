@@ -98,9 +98,4 @@ namespace ReminiscenceBot.Models
         Tiefling,
         Halfling
     }
-
-    public interface IIdentifiable
-    {
-        public ulong Id { get; set; }
-    }
 }
