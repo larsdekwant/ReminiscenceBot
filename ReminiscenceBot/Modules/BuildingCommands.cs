@@ -35,7 +35,7 @@ namespace ReminiscenceBot.Modules
 
             var embedBuilder = new EmbedBuilder()
                 .WithTitle("List of all available buildings")
-                .WithDescription(string.Join('\n', buildings.Select(b => b.Name)))
+                .WithDescription(string.Join('\n', buildings.Select(b => $"{b.Name} (+{b.BonusChance}%)")))
                 .WithCurrentTimestamp();
 
             await RespondAsync(embed: embedBuilder.Build());

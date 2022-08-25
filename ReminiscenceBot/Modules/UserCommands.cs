@@ -104,7 +104,7 @@ namespace ReminiscenceBot.Modules
             }
 
             // Finally add the building to the user
-            rorUser.Player.Buildings.Add(buildingName);
+            rorUser.Player.Buildings.Add(building.Name, building.BonusChance);
             _dbService.UpsertDocument("users",
                 Builders<RorUser>.Filter.Eq(u => u.Discord.Id, Context.User.Id),
                 rorUser);

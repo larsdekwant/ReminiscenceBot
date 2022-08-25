@@ -57,7 +57,7 @@ namespace ReminiscenceBot.Services
         {
             var collection = _db.GetCollection<T>(table);
 
-            return collection.Find(new BsonDocument()).ToList();
+            return collection.Find(Builders<T>.Filter.Empty).ToList();
         }
 
         /// <summary>
