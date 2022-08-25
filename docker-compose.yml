@@ -15,8 +15,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
-    #volumes:
-    #  - mongo-data:/data/db
+    volumes:
+      - mongo-data:/data/db
 
   mongo-express:
     image: mongo-express
@@ -30,6 +30,6 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongodb
 
 # Setup volumes to retain database data through container restarts
-#volumes:
-#  mongo-data:
-#    driver: local
+volumes:
+  mongo-data:
+    driver: local
