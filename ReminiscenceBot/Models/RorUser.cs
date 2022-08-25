@@ -26,7 +26,7 @@ namespace ReminiscenceBot.Models
     /// Contains some generic information about the users' Discord.
     /// </summary>
     [BsonNoId]
-    public record DiscordInfo
+    public record DiscordInfo : IIdentifiable
     {
         public ulong Id { get; set; }
         public string Username { get; set; }
@@ -53,6 +53,7 @@ namespace ReminiscenceBot.Models
         public string RorName { get; set; }
         public McHeroesClass Class { get; set; }
         public McRacesOfThana Race { get; set; }
+        public List<string> Buildings { get; set; }
 
         [ComplexParameterCtor]
         public PlayerInfo(
@@ -65,7 +66,10 @@ namespace ReminiscenceBot.Models
             RorName = rorName;
             Class = @class;
             Race = race;
+            Buildings = new List<string>();
         }
+
+        public string Character => $"{RorName} ({Race} {Class})";
     }
 
     /// <summary>
@@ -88,10 +92,15 @@ namespace ReminiscenceBot.Models
     public enum McRacesOfThana
     {
         Human,
-        Elve,
-        Dwarve,
+        Elf,
+        Dwarf,
         Gnome,
         Tiefling,
         Halfling
+    }
+
+    public interface IIdentifiable
+    {
+        public ulong Id { get; set; }
     }
 }

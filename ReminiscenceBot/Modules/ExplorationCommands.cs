@@ -4,10 +4,12 @@ using Discord.Interactions;
 using ReminiscenceBot.Services;
 using ReminiscenceBot.Models;
 using Discord.WebSocket;
+using MongoDB.Driver;
+using System.Text.RegularExpressions;
 
 namespace ReminiscenceBot.Modules
 {
-    [Group("exploration", "Commands related to exploration")]
+    [Discord.Interactions.Group("explore", "Commands related to exploration")]
     public class ExplorationCommands : InteractionModuleBase<SocketInteractionContext>
     {
         private readonly DatabaseService _dbService;
@@ -15,40 +17,22 @@ namespace ReminiscenceBot.Modules
         public ExplorationCommands(DatabaseService dbService)
         {
             _dbService = dbService;
+        }
+
+        [SlashCommand("start", "Starts an expedition")]
+        public async Task TestExpedition(
+            [Summary(description: "Specify your crewmates by with a list of mentions (@user)")] string listOfCrew)
+        {
+            // Match all mention strings of the form <@12345> (normal) and <@!12345> (nickname)
+            var crewIds = Regex
+                .Matches(listOfCrew, @"<@!?(?<id>\d+)>")
+                .Select(m => ulong.Parse(m.Groups["id"].Value));
+
+            List<RorUser> users = _dbService.LoadDocuments("users", Builders<RorUser>.Filter.In(x => x.Discord.Id, crewIds));
+
+            // TODO: mention users that do not have an account and can thus not join.
+
+            await RespondAsync("You are going on a journey with: " + string.Join(" ", users.Select(u => u.Discord.Mention)));
         }       
-
-        [SlashCommand("menu-test", "Test menu functionality")]
-        public async Task TestMenu()
-        {
-            var menu = new SelectMenuBuilder()
-                .WithCustomId("test")
-                .WithPlaceholder("Select an item")
-                .WithMaxValues(2)
-                .AddOption(Context.User.Username, "opt-a", "This is option A")
-                .AddOption("Option B", "opt-b", "This is option B")
-                .AddOption("Option C", "opt-c", "This is option C");
-
-            await RespondAsync("Choose an option!", components: new ComponentBuilder().WithSelectMenu(menu).Build(), ephemeral: true);
-        }
-
-        [ComponentInteraction("test", true)]
-        public async Task TestMenuHandler(string[] selections)
-        {
-            await RespondAsync($"You selected {selections.Length} options");
-        }
-
-        [SlashCommand("echo", "Echo an input by pressing a button")]
-        public async Task EchoSubcommand(string input)
-            => await RespondAsync(components: new ComponentBuilder().WithButton("Echo", $"echoButton_{input}").Build());
-
-        [ComponentInteraction("echoButton_*", true)]
-        public async Task EchoButton(string input)
-            => await RespondAsync(input);
-
-        [SlashCommand("choose-user", "Pick a user from the server")]
-        public async Task ChooseUser(IUser user)
-        {
-            await RespondAsync(user.Mention);
-        }
     }
 }

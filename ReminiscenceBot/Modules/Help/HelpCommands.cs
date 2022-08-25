@@ -19,7 +19,8 @@ namespace ReminiscenceBot.Modules
             _commands = commands;
         }
 
-        [SlashCommand("help", "Displays an helpful explaination for a specific command.")]
+        [SlashCommand("command", "Displays an helpful explaination for a specific command.")]
+        [Help("Did you just use this command to show this info? I think you know how to use it :)")]
         public async Task Help(string cmd)
         {
             foreach (var method in Assembly.GetExecutingAssembly().GetTypes().SelectMany(t => t.GetMethods()))
@@ -49,7 +50,7 @@ namespace ReminiscenceBot.Modules
             foreach (SlashCommandInfo cmd in cmds)
             {
                 if (cmd.Name == "help") continue;
-                embedBuilder.AddField(cmd.Name, cmd.Description);
+                embedBuilder.AddField(cmd.Module.SlashGroupName + ":" + cmd.Name, cmd.Description);
             }
 
             await RespondAsync("Here's a list of commands and their description:", embed: embedBuilder.Build());

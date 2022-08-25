@@ -36,11 +36,9 @@ namespace ReminiscenceBot
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
                 .AddSingleton(new DatabaseService("reminiscence"))
-                .AddSingleton<CommandService>()
+                .AddSingleton<InteractionHandlerService>()
                 .BuildServiceProvider(); ;
-
-            // Subscribe the event handlers and loggers.
-            _client.Ready += async () => { await _commands.RegisterCommandsToGuildAsync(652162806535421972); };          
+             
             _client.Log += Log;
             _commands.Log += Log;
         }
@@ -51,7 +49,7 @@ namespace ReminiscenceBot
             await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOT_TOKEN"));
             await _client.StartAsync();
 
-            await _services.GetRequiredService<CommandService>().InitializeAsync();
+            await _services.GetRequiredService<InteractionHandlerService>().InitializeAsync();
 
             // Keep the bot running until it is closed.
             await Task.Delay(Timeout.Infinite);
