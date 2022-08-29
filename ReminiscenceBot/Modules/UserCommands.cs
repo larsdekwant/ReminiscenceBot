@@ -78,27 +78,25 @@ namespace ReminiscenceBot.Modules
 
         [SlashCommand("add-building", "Adds a building to a user")]
         [Help("This is some useless help message.")]
-        public async Task AddBuilding(RorUser rorUser, string buildingName)
+        public async Task AddBuilding(RorUser user, Building building)
         {
-            Building? building = _dbService.LoadDocuments("buildings",
-                Builders<Building>.Filter.Eq(b => b.Name, buildingName)).FirstOrDefault();
+            //Building? building = _dbService.LoadDocuments("buildings",
+            //    Builders<Building>.Filter.Eq(b => b.Name, buildingName)).FirstOrDefault();
 
-            // Check whether an user was found in the database
-            if (building is null)
-            {
-                await RespondAsync($"Building `{buildingName}` does not exist. Use `/building list` to show a list of all buildings.");
-                return;
-            }
+            //// Check whether an user was found in the database
+            //if (building is null)
+            //{
+            //    await RespondAsync($"Building `{buildingName}` does not exist. Use `/building list` to show a list of all buildings.");
+            //    return;
+            //}
 
             // Finally add the building to the user
-            rorUser.Player.Buildings.Add(building.Name, building.BonusChance);
-            _dbService.UpsertDocument("users",
-                Builders<RorUser>.Filter.Eq(u => u.Discord.Id, Context.User.Id),
-                rorUser);
+            user.Player.Buildings.TryAdd(building.Name, building.BonusChance);
+            _dbService.UpsertDocument("users", Builders<RorUser>.Filter.Eq(u => u.Discord.Id, Context.User.Id), user);
 
             await RespondAsync(
-                $"Added `{buildingName}` to {rorUser.Discord.Mention}'s list of buildings.\n" +
-                $"{rorUser.Discord.Mention} now has the following buildings: {string.Join(", ", rorUser.Player.Buildings)}");
+                $"Added `{building.Name}` to {user.Discord.Mention}'s list of buildings.\n" +
+                $"{user.Discord.Mention} now has the following buildings: {string.Join(", ", user.Player.Buildings)}");
         }
     }
 }

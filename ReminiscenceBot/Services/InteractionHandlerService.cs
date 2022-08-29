@@ -32,6 +32,7 @@ namespace ReminiscenceBot.Services
         {
             _commands.AddTypeConverter<RorUser>(new RorUserConverter(_database));
             _commands.AddTypeConverter<List<RorUser>>(new RorUserListConverter(_database));
+            _commands.AddTypeConverter<Building>(new BuildingConverter(_database));
 
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 

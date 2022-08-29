@@ -4,7 +4,6 @@ using Discord.Interactions;
 using ReminiscenceBot.Services;
 using ReminiscenceBot.Models;
 using MongoDB.Driver;
-using System.Numerics;
 
 namespace ReminiscenceBot.Modules
 {
@@ -25,7 +24,7 @@ namespace ReminiscenceBot.Modules
                 Builders<Building>.Filter.Eq(b => b.Name, building.Name),
                 building);
 
-            await RespondAsync($"Added the building to the catalog!");
+            await RespondAsync($"Added building `{building.Name}` to the catalog!");
         }
 
         [SlashCommand("list", "Lists all available buildings")]

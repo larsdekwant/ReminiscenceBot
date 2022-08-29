@@ -39,7 +39,8 @@ namespace ReminiscenceBot.Models
                 ? Task.FromResult(TypeConverterResult.FromSuccess(rorUser))
                 : Task.FromResult(TypeConverterResult.FromError(InteractionCommandError.ConvertFailed,
                     $"Failed to convert parameter: {option.Name}\n" +
-                    $"Reason: {user.Mention} does not have a Realms of Reminiscence account"));
+                    $"Reason: {user.Mention} does not have a Realms of Reminiscence account.\n" +
+                    $"Use `/user list` to show a list of all available users."));
         }
     }
 }
