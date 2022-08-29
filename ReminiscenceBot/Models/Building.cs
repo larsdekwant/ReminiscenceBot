@@ -9,6 +9,9 @@ namespace ReminiscenceBot.Models
 {
     public record Building
     {
+        [BsonId, BsonIgnoreIfDefault]
+        private ObjectId Id { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
         public double BonusChance { get; set; }

@@ -40,6 +40,6 @@ namespace ReminiscenceBot.Models
                 : Task.FromResult(TypeConverterResult.FromError(InteractionCommandError.ConvertFailed,
                     $"Failed to convert parameter: {option.Name}\n" +
                     $"Reason: Building `{buildingName}` does not exist. Use `/building list` to show a list of all buildings."));
-        }
+        }        
     }
 }

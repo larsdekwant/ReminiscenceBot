@@ -10,6 +10,9 @@ namespace ReminiscenceBot.Models
     /// </summary>
     public record RorUser
     {
+        [BsonId, BsonIgnoreIfDefault]
+        private ObjectId Id;
+
         public DiscordInfo Discord { get; set; }
         public PlayerInfo Player { get; set; }
 
