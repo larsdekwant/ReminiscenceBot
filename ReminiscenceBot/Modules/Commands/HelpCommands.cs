@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace ReminiscenceBot.Modules
+namespace ReminiscenceBot.Modules.Commands
 {
     [Group("help", "Commands containing helpful information about other commands.")]
     public class HelpCommands : InteractionModuleBase<SocketInteractionContext>

@@ -4,7 +4,7 @@ using Discord.WebSocket;
 using Discord;
 
 using ReminiscenceBot.Models;
-using ReminiscenceBot.Modules;
+using ReminiscenceBot.Modules.TypeConverters;
 
 namespace ReminiscenceBot.Services
 {

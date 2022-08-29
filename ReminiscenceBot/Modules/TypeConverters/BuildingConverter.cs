@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using ReminiscenceBot.Models;
 using ReminiscenceBot.Services;
 
-namespace ReminiscenceBot.Models
+namespace ReminiscenceBot.Models.TypeConverters
 {
     /// <summary>
     /// Allows for the use of <see cref="Building"/> in SlashCommand parameters.

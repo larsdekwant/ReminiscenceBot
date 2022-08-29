@@ -5,7 +5,7 @@ using ReminiscenceBot.Services;
 using ReminiscenceBot.Models;
 using MongoDB.Driver;
 
-namespace ReminiscenceBot.Modules
+namespace ReminiscenceBot.Modules.Commands
 {
     [Group("building", "Commands related to buildings")]
     public class BuildingCommands : InteractionModuleBase<SocketInteractionContext>

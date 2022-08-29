@@ -7,7 +7,7 @@ using Discord.WebSocket;
 using MongoDB.Driver;
 using System.Text.RegularExpressions;
 
-namespace ReminiscenceBot.Modules
+namespace ReminiscenceBot.Modules.Commands
 {
     [Group("explore", "Commands related to exploration")]
     public class ExplorationCommands : InteractionModuleBase<SocketInteractionContext>
@@ -22,7 +22,7 @@ namespace ReminiscenceBot.Modules
         [SlashCommand("start", "Starts an expedition")]
         public async Task StartExpedition(
             [Summary(description: "Specify your crewmates by with a list of mentions (@user)")] List<RorUser> users)
-        {            
+        {
             RorUser captain = _dbService.LoadDocuments("users",
                 Builders<RorUser>.Filter.Eq(u => u.Discord.Id, Context.User.Id)).First();
 
@@ -38,13 +38,14 @@ namespace ReminiscenceBot.Modules
 
             // Perform an expedition with the success chance.
             Random rnd = new Random();
-            if (rnd.NextDouble() < (chance / 100))
+            if (rnd.NextDouble() < chance / 100)
             {
                 await ReplyAsync("The expedition was succesful! :tada:");
-            } else
+            }
+            else
             {
                 await ReplyAsync("The expedition failed :(");
-            }                        
-        }       
+            }
+        }
     }
 }

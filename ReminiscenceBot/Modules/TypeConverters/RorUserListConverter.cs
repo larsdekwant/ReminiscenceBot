@@ -10,7 +10,7 @@ using MongoDB.Driver;
 using ReminiscenceBot.Models;
 using ReminiscenceBot.Services;
 
-namespace ReminiscenceBot.Models
+namespace ReminiscenceBot.Modules.TypeConverters
 {
     /// <summary>
     /// Allows for the use of a list of <see cref="RorUser>"/> in SlashCommand parameters.

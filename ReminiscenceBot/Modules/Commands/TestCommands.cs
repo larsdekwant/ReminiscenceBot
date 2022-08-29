@@ -8,7 +8,7 @@ using ReminiscenceBot.Models;
 using Discord.WebSocket;
 using Discord.Commands;
 
-namespace ReminiscenceBot.Modules
+namespace ReminiscenceBot.Modules.Commands
 {
     /// <summary>
     /// This is just a class to test some of Discord.NET's functionalities, will be removed later.
@@ -54,6 +54,6 @@ namespace ReminiscenceBot.Modules
 
         [ComponentInteraction("echoButton_*", true)]
         public async Task EchoButton(string input)
-            => await RespondAsync(input);        
+            => await RespondAsync(input);
     }
 }

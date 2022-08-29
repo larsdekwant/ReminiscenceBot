@@ -8,7 +8,7 @@ using MongoDB.Driver;
 using System.Numerics;
 using ReminiscenceBot.Modules.AutocompleteHandlers;
 
-namespace ReminiscenceBot.Modules
+namespace ReminiscenceBot.Modules.Commands
 {
     [Group("user", "Commands related to users")]
     public class UserCommands : InteractionModuleBase<SocketInteractionContext>
@@ -67,7 +67,7 @@ namespace ReminiscenceBot.Modules
         [SlashCommand("add-building", "Adds a building to a user")]
         [Help("This is some useless help message.")]
         public async Task AddBuilding(
-            RorUser user, 
+            RorUser user,
             [Autocomplete(typeof(BuildingAutocompleteHandler))] Building building)
         {
             user.Player.Buildings.TryAdd(building.Name, building.BonusChance);
