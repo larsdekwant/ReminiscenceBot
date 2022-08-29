@@ -19,33 +19,20 @@ namespace ReminiscenceBot.Modules
             _dbService = dbService;
         }
 
-        [SlashCommand("profile", "Displays a profile for a given user (defaults to the yourself)")]
+        [SlashCommand("profile", "Displays a profile for a given user")]
         [Help("This is some useless help message.")]
-        public async Task ShowUserProfile(IUser? user = null)
+        public async Task ShowUserProfile(RorUser user)
         {
-            if (user == null) user = Context.User;
-            RorUser? rorUser = _dbService.LoadDocuments("users", 
-                Builders<RorUser>.Filter.Eq(u => u.Discord.Id, user.Id)).FirstOrDefault();            
+            var dcUser = Context.Guild.GetUser(user.Discord.Id);
 
-            // Check whether an user was found in the database
-            if (rorUser is null)
-            {
-                await RespondAsync(
-                    "This user does not have a profile.\n" +
-                    "Use `/user list` to show a list of all Realms of Reminiscence users.\n" +
-                    "Use `/user set` to setup your own user profile.");
-                return;
-            }
-
-            // Build the profile embed.
             var embedBuilder = new EmbedBuilder()
-                .WithThumbnailUrl(user.GetAvatarUrl())
+                .WithThumbnailUrl(dcUser.GetAvatarUrl())
                 .WithTitle("Realms of Reminiscence profile")
-                .WithAuthor(user)
-                .AddField("Minecraft name", rorUser.Player.McUsername)
-                .AddField("Character name", rorUser.Player.RorName)
-                .AddField("Class", rorUser.Player.Class)
-                .AddField("Race", rorUser.Player.Race)
+                .WithAuthor(dcUser)
+                .AddField("Minecraft name", user.Player.McUsername)
+                .AddField("Character name", user.Player.RorName)
+                .AddField("Class", user.Player.Class)
+                .AddField("Race", user.Player.Race)
                 .WithColor(Color.Blue)
                 .WithCurrentTimestamp();
 
@@ -80,17 +67,6 @@ namespace ReminiscenceBot.Modules
         [Help("This is some useless help message.")]
         public async Task AddBuilding(RorUser user, Building building)
         {
-            //Building? building = _dbService.LoadDocuments("buildings",
-            //    Builders<Building>.Filter.Eq(b => b.Name, buildingName)).FirstOrDefault();
-
-            //// Check whether an user was found in the database
-            //if (building is null)
-            //{
-            //    await RespondAsync($"Building `{buildingName}` does not exist. Use `/building list` to show a list of all buildings.");
-            //    return;
-            //}
-
-            // Finally add the building to the user
             user.Player.Buildings.TryAdd(building.Name, building.BonusChance);
             _dbService.UpsertDocument("users", Builders<RorUser>.Filter.Eq(u => u.Discord.Id, Context.User.Id), user);
 
