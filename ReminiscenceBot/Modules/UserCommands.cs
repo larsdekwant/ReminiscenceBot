@@ -78,21 +78,8 @@ namespace ReminiscenceBot.Modules
 
         [SlashCommand("add-building", "Adds a building to a user")]
         [Help("This is some useless help message.")]
-        public async Task AddBuilding(IUser user, string buildingName)
+        public async Task AddBuilding(RorUser rorUser, string buildingName)
         {
-            RorUser? rorUser = _dbService.LoadDocuments("users",
-                Builders<RorUser>.Filter.Eq(u => u.Discord.Id, user.Id)).FirstOrDefault();
-
-            // Check whether an user was found in the database
-            if (rorUser is null)
-            {
-                await RespondAsync(
-                    "This user does not have a profile.\n" +
-                    "Use `/user list` to show a list of all Realms of Reminiscence users.\n" +
-                    "Use `/user set` to setup your own user profile.");
-                return;
-            }
-
             Building? building = _dbService.LoadDocuments("buildings",
                 Builders<Building>.Filter.Eq(b => b.Name, buildingName)).FirstOrDefault();
 

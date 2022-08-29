@@ -26,7 +26,7 @@ namespace ReminiscenceBot.Models
     /// Contains some generic information about the users' Discord.
     /// </summary>
     [BsonNoId]
-    public record DiscordInfo : IIdentifiable
+    public record DiscordInfo
     {
         public ulong Id { get; set; }
         public string Username { get; set; }

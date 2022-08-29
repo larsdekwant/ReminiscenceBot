@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace ReminiscenceBot.Modules
 {
-    [Discord.Interactions.Group("explore", "Commands related to exploration")]
+    [Group("explore", "Commands related to exploration")]
     public class ExplorationCommands : InteractionModuleBase<SocketInteractionContext>
     {
         private readonly DatabaseService _dbService;
@@ -21,17 +21,8 @@ namespace ReminiscenceBot.Modules
 
         [SlashCommand("start", "Starts an expedition")]
         public async Task StartExpedition(
-            [Summary(description: "Specify your crewmates by with a list of mentions (@user)")] string listOfCrew)
-        {
-            // Match all mention strings of the form <@12345> (normal) and <@!12345> (nickname)
-            var crewIds = Regex
-                .Matches(listOfCrew, @"<@!?(?<id>\d+)>")
-                .Select(m => ulong.Parse(m.Groups["id"].Value));
-
-            List<RorUser> users = _dbService.LoadDocuments("users", Builders<RorUser>.Filter.In(x => x.Discord.Id, crewIds));
-
-            // TODO: mention users that do not have an account and can thus not join.
-
+            [Summary(description: "Specify your crewmates by with a list of mentions (@user)")] List<RorUser> users)
+        {            
             RorUser captain = _dbService.LoadDocuments("users",
                 Builders<RorUser>.Filter.Eq(u => u.Discord.Id, Context.User.Id)).First();
 

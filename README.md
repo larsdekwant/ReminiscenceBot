@@ -1,13 +1,13 @@
 # Realms of Reminiscence Discord Bot (WIP)
 A Discord bot written in C# to support a roleplaying Minecraft server called Realms of Reminiscence.
 
-# Features
+## Features
 WIP
 - Create user profiles
 - Create entries of your minecraft buildings
 - Start expeditions and have a chance to explore other continents
 
-# Setup
+## Setup
 The only required software to run this project is [docker](https://www.docker.com/).
 
 Steps to run the project:
