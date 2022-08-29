@@ -3,6 +3,9 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Discord;
 
+using ReminiscenceBot.Models;
+using ReminiscenceBot.Modules;
+
 namespace ReminiscenceBot.Services
 {
     public class InteractionHandlerService
@@ -10,12 +13,14 @@ namespace ReminiscenceBot.Services
         private readonly DiscordSocketClient _client;
         private readonly InteractionService _commands;
         private readonly IServiceProvider _services;
+        private readonly DatabaseService _database;
 
-        public InteractionHandlerService(DiscordSocketClient client, InteractionService commands, IServiceProvider services)
+        public InteractionHandlerService(DiscordSocketClient client, InteractionService commands, IServiceProvider services, DatabaseService database)
         {
             _client = client;
             _commands = commands;
             _services = services;
+            _database = database;
         }
 
         /// <summary>
@@ -25,6 +30,9 @@ namespace ReminiscenceBot.Services
         /// <returns>An awaitable task</returns>
         public async Task InitializeAsync()
         {
+            _commands.AddTypeConverter<RorUser>(new RorUserConverter(_database));
+            _commands.AddTypeConverter<List<RorUser>>(new RorUserListConverter(_database));
+
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
             _client.Ready += RegisterCommands;
@@ -41,7 +49,22 @@ namespace ReminiscenceBot.Services
             try
             {
                 SocketInteractionContext context = new SocketInteractionContext(_client, interaction);
-                await _commands.ExecuteCommandAsync(context, _services);
+                var result = await _commands.ExecuteCommandAsync(context, _services);
+
+                if (!result.IsSuccess)
+                {
+                    string msg = result.Error switch
+                    {
+                        InteractionCommandError.UnknownCommand => "**Unknown command**",
+                        InteractionCommandError.UnmetPrecondition => "**Unmet Precondition**",
+                        InteractionCommandError.BadArgs => "**Invalid number or arguments**",
+                        InteractionCommandError.ConvertFailed => "**Parameter conversion failed**",
+                        InteractionCommandError.Exception => "**Command exception**",
+                        InteractionCommandError.Unsuccessful => "**Command could not be executed**",
+                        _ => $"**Unhandled error {result.Error}**",
+                    };
+                    await interaction.RespondAsync($"{msg}\n{result.ErrorReason}");
+                }
             }
             catch (Exception ex)
             {
