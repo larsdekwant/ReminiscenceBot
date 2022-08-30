@@ -8,11 +8,8 @@ namespace ReminiscenceBot.Models
     /// <summary>
     /// Represents a Realms of Reminiscence (RoR) user.
     /// </summary>
-    public record RorUser
+    public record RorUser : BaseMongoItem
     {
-        [BsonId, BsonIgnoreIfDefault]
-        private ObjectId Id;
-
         public DiscordInfo Discord { get; set; }
         public PlayerInfo Player { get; set; }
 

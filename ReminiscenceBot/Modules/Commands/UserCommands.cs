@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using MongoDB.Driver;
 using System.Numerics;
 using ReminiscenceBot.Modules.AutocompleteHandlers;
+using ReminiscenceBot.Modules.Attributes;
 
 namespace ReminiscenceBot.Modules.Commands
 {
