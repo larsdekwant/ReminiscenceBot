@@ -35,6 +35,9 @@ namespace ReminiscenceBot.Modules.Commands
                 .AddField("Character name", user.Player.RorName)
                 .AddField("Class", user.Player.Class)
                 .AddField("Race", user.Player.Race)
+                .AddField("Buildings", user.Player.Buildings)
+                .AddField("Total expeditions", user.Player.TotalExpeditions)
+                .AddField("Expeditions failed in a row", user.Player.FailedExpeditions)
                 .WithColor(Color.Blue)
                 .WithCurrentTimestamp();
 

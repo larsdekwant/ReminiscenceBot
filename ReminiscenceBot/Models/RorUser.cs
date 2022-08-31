@@ -52,6 +52,8 @@ namespace ReminiscenceBot.Models
         public McHeroesClass Class { get; set; }
         public McRacesOfThana Race { get; set; }
         public Dictionary<string, double> Buildings { get; set; }
+        public uint TotalExpeditions { get; set; }
+        public uint FailedExpeditions { get; set; }
 
         [ComplexParameterCtor]
         public PlayerInfo(
@@ -65,6 +67,8 @@ namespace ReminiscenceBot.Models
             Class = @class;
             Race = race;
             Buildings = new Dictionary<string, double>();
+            TotalExpeditions = 0;
+            FailedExpeditions = 0;
         }
 
         public string Character => $"{RorName} ({Race} {Class})";
