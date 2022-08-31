@@ -6,6 +6,7 @@ using ReminiscenceBot.Models;
 using Discord.WebSocket;
 using MongoDB.Driver;
 using System.Text.RegularExpressions;
+using ReminiscenceBot.Modules.AutocompleteHandlers;
 
 namespace ReminiscenceBot.Modules.Commands
 {
@@ -30,18 +31,16 @@ namespace ReminiscenceBot.Modules.Commands
 
         [SlashCommand("start", "Starts an expedition")]
         public async Task StartExpedition(
-            [Summary(description: "Specify your crewmates by with a list of mentions (@user)")] List<RorUser> users)
+            [Summary(description: "Choose a captain (whose harbour will determine the success chance)")] RorUser captain,
+            [Summary(description: "Specify your crewmates by with a list of mentions (@user)")] List<RorUser> crew)
         {
-            RorUser captain = _dbService.LoadDocuments("users",
-                Builders<RorUser>.Filter.Eq(u => u.Discord.Id, Context.User.Id)).First();
-
             double chance = captain.Player.Buildings.Values.Sum();
 
             var embed = new EmbedBuilder()
                 .WithTitle($"An epic expedition with {chance.ToString("0.#")}% chance to succeed.")
                 .WithAuthor(Context.User)
                 .AddField("Captain", captain.Discord.Mention)
-                .AddField("Crew", string.Join(" ", users.Select(u => u.Discord.Mention)))
+                .AddField("Crew", string.Join(" ", crew.Select(u => u.Discord.Mention)))
                 .WithCurrentTimestamp();
             await RespondAsync(embed: embed.Build());
 
