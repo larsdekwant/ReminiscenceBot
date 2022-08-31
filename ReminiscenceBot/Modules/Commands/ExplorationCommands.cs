@@ -14,6 +14,15 @@ namespace ReminiscenceBot.Modules.Commands
     {
         private readonly DatabaseService _dbService;
 
+        private static readonly string[] _fails = { 
+            "The explorers have returned with little to show for.", 
+            "The Expedition came back empty handed.",
+            "No new land was discovered."};
+
+        private static readonly string[] _successFormats = {
+            "The islands of **{0}** have been discovered.",
+            "The continent of **{0}** has been discovered."};
+
         public ExplorationCommands(DatabaseService dbService)
         {
             _dbService = dbService;
@@ -40,11 +49,15 @@ namespace ReminiscenceBot.Modules.Commands
             Random rnd = new Random();
             if (rnd.NextDouble() < chance / 100)
             {
-                await ReplyAsync("The expedition was succesful! :tada:");
+                var continents = _dbService.LoadAllDocuments<Continent>("continents");
+
+                await ReplyAsync(string.Format(
+                        _successFormats[rnd.Next(_successFormats.Length)], 
+                        continents[rnd.Next(continents.Count)].Name));
             }
             else
             {
-                await ReplyAsync("The expedition failed :(");
+                await ReplyAsync(_fails[rnd.Next(_fails.Length)]);
             }
         }
     }

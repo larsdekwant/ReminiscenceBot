@@ -30,7 +30,7 @@ namespace ReminiscenceBot.Modules.Commands
         [SlashCommand("list", "Lists all available buildings")]
         public async Task ListAllBuildings()
         {
-            List<Building> buildings = _dbService.LoadAllDocuments<Building>("buildings");
+            var buildings = _dbService.LoadAllDocuments<Building>("buildings");
 
             var embedBuilder = new EmbedBuilder()
                 .WithTitle("List of all available buildings")

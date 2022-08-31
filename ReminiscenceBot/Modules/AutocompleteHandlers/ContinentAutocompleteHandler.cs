@@ -7,10 +7,10 @@ using ReminiscenceBot.Models;
 namespace ReminiscenceBot.Modules.AutocompleteHandlers
 {
     /// <summary>
-    /// This class handles the autocompletion for parameters of type <see cref="Building"/>
+    /// This class handles the autocompletion for parameters of type <see cref="Continent"/>
     /// The suggestions are dynamically pulled from the database.
     /// </summary>
-    public class BuildingAutocompleteHandler : AutocompleteHandler
+    public class ContinentAutocompleteHandler : AutocompleteHandler
     {
         private readonly DatabaseService _dbService;
 
@@ -18,7 +18,7 @@ namespace ReminiscenceBot.Modules.AutocompleteHandlers
         /// <see cref="DatabaseService"/> gets injected by Dependency Injection
         /// </summary>
         /// <param name="dbService">The service to interact with the database</param>
-        public BuildingAutocompleteHandler(DatabaseService dbService)
+        public ContinentAutocompleteHandler(DatabaseService dbService)
         {
             _dbService = dbService;
         }
@@ -29,8 +29,8 @@ namespace ReminiscenceBot.Modules.AutocompleteHandlers
             IParameterInfo parameter,
             IServiceProvider services)
         {
-            var buildings = _dbService.LoadAllDocuments<Building>("buildings");
-            var autocomplete = buildings.Select(b => new AutocompleteResult(b.Name, b.Name));
+            var continents = _dbService.LoadAllDocuments<Continent>("continents");
+            var autocomplete = continents.Select(b => new AutocompleteResult(b.Name, b.Name));
             return AutocompletionResult.FromSuccess(autocomplete.Take(25));
         }
     }
